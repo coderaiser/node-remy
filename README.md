@@ -1,18 +1,18 @@
-# Rummy [![License][LicenseIMGURL]][LicenseURL] [![NPM version][NPMIMGURL]][NPMURL] [![Dependency Status][DependencyStatusIMGURL]][DependencyStatusURL] [![Build Status][BuildStatusIMGURL]][BuildStatusURL]
+# Remy [![License][LicenseIMGURL]][LicenseURL] [![NPM version][NPMIMGURL]][NPMURL] [![Dependency Status][DependencyStatusIMGURL]][DependencyStatusURL] [![Build Status][BuildStatusIMGURL]][BuildStatusURL]
 
 Remove files with emitter.
 
 ## Global
 
-`Rummy` could be installed global with
+`remy` could be installed global with
 
 ```
-npm i rummy -g
+npm i remy -g
 ```
 And used this way:
 
 ```
-Usage: rummy [path]
+Usage: remy [path]
 Options:
   -h, --help      display this help and exit
   -v, --version   output version information and exit
@@ -20,7 +20,7 @@ Options:
 
 ## Local
 
-`Rummy` could be used localy. It will emit event on every copied file.
+`Remy` could be used localy. It will emit event on every copied file.
 Good for making progress bars.
 
 ### Install
@@ -30,14 +30,14 @@ npm i rummy --save
 ```
 
 ### How to use?
-Rummy could be called with one or two arguments: `rummy(path[, files])`.
+`Remy` could be called with one or two arguments: `remy(path[, files])`.
 
 ```js
-var rummy           = require('rummy'),
+var remy            = require('remy'),
     cwd             = process.cwd(),
     abortOnError    = false;
     
-rm = rummy(cwd, [
+rm = remy(cwd, [
     'LICENSE',
     'README.md',
     'package.json'
@@ -83,12 +83,12 @@ Copying ended up
 
 MIT
 
-[NPMIMGURL]:                https://img.shields.io/npm/v/rummy.svg?style=flat
-[BuildStatusIMGURL]:        https://img.shields.io/travis/coderaiser/node-rummy/master.svg?style=flat
-[DependencyStatusIMGURL]:   https://img.shields.io/gemnasium/coderaiser/node-rummy.svg?style=flat
+[NPMIMGURL]:                https://img.shields.io/npm/v/remy.svg?style=flat
+[BuildStatusIMGURL]:        https://img.shields.io/travis/coderaiser/node-remy/master.svg?style=flat
+[DependencyStatusIMGURL]:   https://img.shields.io/gemnasium/coderaiser/node-remy.svg?style=flat
 [LicenseIMGURL]:            https://img.shields.io/badge/license-MIT-317BF9.svg?style=flat
-[NPMURL]:                   https://npmjs.org/package/rummy "npm"
-[BuildStatusURL]:           https://travis-ci.org/coderaiser/node-rummy  "Build Status"
-[DependencyStatusURL]:      https://gemnasium.com/coderaiser/node-rummy "Dependency Status"
+[NPMURL]:                   https://npmjs.org/package/remy "npm"
+[BuildStatusURL]:           https://travis-ci.org/coderaiser/node-remy  "Build Status"
+[DependencyStatusURL]:      https://gemnasium.com/coderaiser/node-remy "Dependency Status"
 [LicenseURL]:               https://tldrlegal.com/license/mit-license "MIT License"
 

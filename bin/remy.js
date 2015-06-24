@@ -3,7 +3,7 @@
 (function() {
     'use strict';
     
-    var rummy       = require('..'),
+    var remy       = require('..'),
         glob        = require('glob'),
         args        = process.argv.slice(2),
         arg         = args[0];
@@ -28,7 +28,7 @@
     function main(name) {
         var rm;
         
-        rm = rummy(name);
+        rm = remy(name);
         
         rm.on('error', function(error, name) {
             console.error(name, ':', error.message);

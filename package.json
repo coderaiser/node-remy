@@ -1,10 +1,10 @@
 {
-  "name": "rummy",
+  "name": "remy",
   "version": "1.0.0",
   "description": "remove files with emitter",
-  "main": "lib/rummy.js",
+  "main": "lib/remy.js",
   "bin": {
-    "rummy": "bin/rummy.js"
+    "remy": "bin/remy.js"
   },
   "dependencies": {
     "findit": "~2.0.0",
@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/coderaiser/node-rummy.git"
+    "url": "git://github.com/coderaiser/node-remy.git"
   },
   "keywords": [
     "copy",
@@ -29,7 +29,7 @@
   "author": "coderaiser <mnemonic.enemy@gmail.com> (http://coderaiser.github.io/)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/coderaiser/node-rummy/issues"
+    "url": "https://github.com/coderaiser/node-remy/issues"
   },
-  "homepage": "https://github.com/coderaiser/node-rummy"
+  "homepage": "https://github.com/coderaiser/node-remy"
 }
