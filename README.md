@@ -66,7 +66,7 @@ rm.on('error', function(error, name, i, percent) {
 });
 
 rm.on('end', function() {
-    console.log('Copying ended up');
+    console.log('Removing ended up');
 });
 ```
 
@@ -76,7 +76,7 @@ In case of starting example output should be similar to:
 33%
 67%
 100%
-Copying ended up
+Removing ended up
 ```
 
 ## License
