@@ -1,3 +1,11 @@
+2015.12.28, v1.0.3
+
+feature:
+- (package) add codestyle
+- (package) rimraf v2.5.0
+- (package) add coverage
+
+
 2015.12.10, v1.0.2
 
 feature:
