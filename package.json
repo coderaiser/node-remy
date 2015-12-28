@@ -9,7 +9,7 @@
   "dependencies": {
     "findit": "~2.0.0",
     "glob": "~6.0.1",
-    "rimraf": "~2.4.0"
+    "rimraf": "~2.5.0"
   },
   "devDependencies": {
     "coveralls": "^2.11.6",
