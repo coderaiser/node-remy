@@ -1,4 +1,4 @@
-# Remy [![License][LicenseIMGURL]][LicenseURL] [![NPM version][NPMIMGURL]][NPMURL] [![Dependency Status][DependencyStatusIMGURL]][DependencyStatusURL] [![Build Status][BuildStatusIMGURL]][BuildStatusURL]
+# Remy [![License][LicenseIMGURL]][LicenseURL] [![NPM version][NPMIMGURL]][NPMURL] [![Dependency Status][DependencyStatusIMGURL]][DependencyStatusURL] [![Build Status][BuildStatusIMGURL]][BuildStatusURL] [![Coverage Status][CoverageIMGURL]][CoverageURL]
 
 Remove files with emitter.
 
@@ -87,8 +87,9 @@ MIT
 [BuildStatusIMGURL]:        https://img.shields.io/travis/coderaiser/node-remy/master.svg?style=flat
 [DependencyStatusIMGURL]:   https://img.shields.io/gemnasium/coderaiser/node-remy.svg?style=flat
 [LicenseIMGURL]:            https://img.shields.io/badge/license-MIT-317BF9.svg?style=flat
+[CoverageIMGURL]:           https://coveralls.io/repos/coderaiser/node-remy/badge.svg?branch=master&service=github
 [NPMURL]:                   https://npmjs.org/package/remy "npm"
 [BuildStatusURL]:           https://travis-ci.org/coderaiser/node-remy  "Build Status"
 [DependencyStatusURL]:      https://gemnasium.com/coderaiser/node-remy "Dependency Status"
 [LicenseURL]:               https://tldrlegal.com/license/mit-license "MIT License"
-
+[CoverageURL]:              https://coveralls.io/github/coderaiser/node-remy?branch=master
