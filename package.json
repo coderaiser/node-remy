@@ -6,19 +6,6 @@
   "bin": {
     "remy": "bin/remy.js"
   },
-  "dependencies": {
-    "findit": "~2.0.0",
-    "glob": "~6.0.1",
-    "rimraf": "~2.5.0"
-  },
-  "devDependencies": {
-    "coveralls": "^2.11.6",
-    "jscs": "~2.7.0",
-    "jshint": "~2.8.0",
-    "npm-run-all": "~1.4.0",
-    "nyc": "^5.0.1",
-    "tape": "^4.2.2"
-  },
   "scripts": {
     "jscs": "jscs --esnext lib test",
     "jshint": "jshint lib test",
@@ -35,6 +22,19 @@
     "copy",
     "emitter"
   ],
+  "dependencies": {
+    "findit": "~2.0.0",
+    "glob": "~6.0.1",
+    "rimraf": "~2.5.0"
+  },
+  "devDependencies": {
+    "coveralls": "^2.11.6",
+    "jscs": "^2.7.0",
+    "jshint": "^2.8.0",
+    "npm-run-all": "^1.4.0",
+    "nyc": "^5.0.1",
+    "tape": "^4.2.2"
+  },
   "author": "coderaiser <mnemonic.enemy@gmail.com> (http://coderaiser.github.io/)",
   "license": "MIT",
   "bugs": {
