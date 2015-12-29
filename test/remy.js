@@ -89,4 +89,23 @@
         });
     });
     
+     test('pause/continue', function(t) {
+        var rm,
+            name = path.join('/tmp', String(Math.random()));
+        
+        fs.writeFileSync(name, 'hello world');
+        
+        rm = remimitter(name);
+        
+        rm.pause();
+        t.ok(rm._pause, 'pause good');
+        
+        rm.continue();
+        t.notOk(rm._pause, 'continue good');
+        
+        rm.on('end', function() {
+            t.end();
+        });
+    });
+    
 })();
