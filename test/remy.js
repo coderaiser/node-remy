@@ -76,4 +76,17 @@
         });
     });
     
+     test('folder: no errors', function(t) {
+        var rm,
+            name = path.join('/tmp', String(Math.random()));
+        
+        fs.mkdirSync(name);
+        
+        rm = remimitter(name);
+        
+        rm.on('end', function() {
+            t.end();
+        });
+    });
+    
 })();
