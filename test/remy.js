@@ -89,7 +89,7 @@
         });
     });
     
-     test('pause/continue', function(t) {
+    test('pause/continue', function(t) {
         var rm,
             name = path.join('/tmp', String(Math.random()));
         
@@ -104,6 +104,32 @@
         t.notOk(rm._pause, 'continue good');
         
         rm.on('end', function() {
+            t.end();
+        });
+    });
+    
+    test('file: find error', function(t) {
+        var rm,
+            name    = path.join('/tmp', String(Math.random())),
+            code    = 'SOME',
+            lstat   = fs.lstat;
+        
+        fs.lstat = function(name, fn) {
+            var error = Error('Some error');
+            
+            error.code = code;
+            
+            process.nextTick(function() {
+                fn(error);
+            });
+        };
+        
+        rm = remimitter(name);
+        
+        rm.on('error', function(error) {
+            fs.lstat = lstat;
+            
+            t.equal(error.code, 'ENOENT', error);
             t.end();
         });
     });
