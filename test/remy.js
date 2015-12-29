@@ -62,4 +62,18 @@
             t.end();
         });
     });
+    
+    test('file: no errors', function(t) {
+        var rm,
+            name = path.join('/tmp', String(Math.random()));
+        
+        fs.writeFileSync(name, 'hello world');
+        
+        rm = remimitter(name);
+        
+        rm.on('end', function() {
+            t.end();
+        });
+    });
+    
 })();
