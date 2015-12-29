@@ -5,7 +5,7 @@
         remimitter  = require('..'),
          
         os          = require('os'),
-        path        = require('path'), 
+        path        = require('path'),
         fs          = require('fs');
     
     test('file: error EACESS', function(t) {
