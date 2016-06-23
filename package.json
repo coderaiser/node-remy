@@ -32,7 +32,7 @@
     "jscs": "^3.0.3",
     "jshint": "^2.8.0",
     "nyc": "^6.1.1",
-    "redrun": "^3.0.0",
+    "redrun": "^4.0.0",
     "tape": "^4.2.2"
   },
   "author": "coderaiser <mnemonic.enemy@gmail.com> (http://coderaiser.github.io/)",
