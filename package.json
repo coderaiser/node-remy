@@ -24,7 +24,7 @@
   ],
   "dependencies": {
     "findit": "~2.0.0",
-    "glob": "~7.0.0",
+    "glob": "^7.1.0",
     "rimraf": "~2.5.0"
   },
   "devDependencies": {
