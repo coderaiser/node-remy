@@ -78,6 +78,11 @@ In case of starting example output should be similar to:
 100%
 Removing ended up
 ```
+## Related
+
+- [Copymitter](https://github.com/coderaiser/node-copymitter "Copymitter") - Copy files with emitter.
+- [OneZip](https://github.com/coderaiser/node-onezip "OneZip") - Pack and extract zip archives with emitter.
+- [Tar-to-zip](https://github.com/coderaiser/node-tar-to-zip "tar-to-zip") - Convert tar and tar.gz archives to zip.
 
 ## License
 
