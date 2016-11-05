@@ -81,6 +81,7 @@ Removing ended up
 ## Related
 
 - [Copymitter](https://github.com/coderaiser/node-copymitter "Copymitter") - Copy files with emitter.
+- [Jaguar](https://github.com/coderaiser/node-jaguar "Jaguar") - Pack and extract .tar.gz archives with emitter.
 - [OneZip](https://github.com/coderaiser/node-onezip "OneZip") - Pack and extract zip archives with emitter.
 - [Tar-to-zip](https://github.com/coderaiser/node-tar-to-zip "tar-to-zip") - Convert tar and tar.gz archives to zip.
 
