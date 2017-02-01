@@ -56,9 +56,7 @@ rm.on('progress', function(percent) {
     }
 });
 
-rm.on('error', function(error, name, i, percent) {
-    console.error(percent, ' -> ', name, ':', error.message);
-    
+rm.on('error', function(error,) {
     if (abortOnError)
         rm.abort();
     else
