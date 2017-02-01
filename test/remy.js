@@ -1,135 +1,132 @@
 'use strict';
 
-var test        = require('tape'),
-    remimitter  = require('..'),
-     
-    os          = require('os'),
-    path        = require('path'),
-    fs          = require('fs');
+const test = require('tape');
+const remy = require('..');
 
-test('file: error EACESS', function(t) {
-    var rm = remimitter('/bin/ls');
+const os = require('os');
+const path = require('path');
+const fs = require('fs');
+
+test('file: error EACESS', (t) => {
+    const rm = remy('/bin/ls');
     
-    rm.on('error', function(error) {
+    rm.on('error', (error) => {
         t.equal(error.code, 'EACCES', error.message);
         rm.abort();
     });
     
-    rm.on('end', function() {
+    rm.on('end', () => {
         t.end();
     });
 });
 
-test('folder: error EACESS', function(t) {
-    var rm = remimitter('/bin');
+test('folder: error EACESS', (t) => {
+    const rm = remy('/bin');
     
-    rm.on('error', function(error) {
+    rm.on('error', (error) => {
         t.equal(error.code, 'EACCES', error.message);
         rm.abort();
     });
     
-    rm.on('end', function() {
+    rm.on('end', () => {
         t.end();
     });
 });
 
-test('folder: error SOME_ERROR', function(t) {
-    var rm,
-        code    = 'SOME_ERROR',
-        rmdir   = fs.rmdir,
-        name    = path.join(os.tmpdir(), String(Math.random()));
+test('folder: error SOME_ERROR', (t) => {
+    const code = 'SOME_ERROR';
+    const rmdir = fs.rmdir;
+    const name = path.join(os.tmpdir(), String(Math.random()));
      
     fs.mkdirSync(name);
     
-    fs.rmdir = function(name, callback) {
-        var error   = Error('Some error');
+    fs.rmdir = (name, callback) => {
+        const error = Error('Some error');
+        
         error.code  = code;
         
         callback(error);
     };
     
-    rm = remimitter(name);
+    const rm = remy(name);
     
-    rm.on('error', function(error) {
+    rm.on('error', (error) => {
         t.equal(error.code, code, error.message);
         rm.abort();
     });
     
-    rm.on('end', function() {
+    rm.on('end', () => {
         fs.rmdir = rmdir;
         fs.rmdirSync(name);
         t.end();
     });
 });
 
-test('file: no errors', function(t) {
-    var rm,
-        name = path.join('/tmp', String(Math.random()));
+test('file: no errors', (t) => {
+    const name = path.join('/tmp', String(Math.random()));
     
     fs.writeFileSync(name, 'hello world');
     
-    rm = remimitter(name);
+    const rm = remy(name);
     
-    rm.on('end', function() {
+    rm.on('end', () => {
         t.end();
     });
 });
 
-test('folder: no errors', function(t) {
-    var rm,
-        name = path.join('/tmp', String(Math.random()));
+test('folder: no errors', (t) => {
+    const name = path.join('/tmp', String(Math.random()));
     
     fs.mkdirSync(name);
     
-    rm = remimitter(name);
+    const rm = remy(name);
     
-    rm.on('end', function() {
+    rm.on('end', () => {
         t.end();
     });
 });
 
-test('pause/continue', function(t) {
-    var rm,
-        name = path.join('/tmp', String(Math.random()));
+test('pause/continue', (t) => {
+    const name = path.join('/tmp', String(Math.random()));
     
     fs.writeFileSync(name, 'hello world');
     
-    rm = remimitter(name);
+    const rm = remy(name);
     
     rm.pause();
+    
     t.ok(rm._pause, 'pause good');
     
     rm.continue();
     t.notOk(rm._pause, 'continue good');
     
-    rm.on('end', function() {
+    rm.on('end', () => {
         t.end();
     });
 });
 
-test('file: find error', function(t) {
-    var rm,
-        name    = path.join('/tmp', String(Math.random())),
-        code    = 'SOME',
-        lstat   = fs.lstat;
+test('file: find error', (t) => {
+    const name = path.join('/tmp', String(Math.random()));
+    const code = 'SOME';
+    const lstat = fs.lstat;
     
-    fs.lstat = function(name, fn) {
-        var error = Error('Some error');
+    fs.lstat = (name, fn) => {
+        const error = Error('Some error');
         
         error.code = code;
         
-        process.nextTick(function() {
+        process.nextTick(() => {
             fn(error);
         });
     };
     
-    rm = remimitter(name);
+    const rm = remy(name);
     
-    rm.on('error', function(error) {
+    rm.on('error', (error) => {
         fs.lstat = lstat;
         
         t.equal(error.code, 'ENOENT', error);
         t.end();
     });
 });
-    
+

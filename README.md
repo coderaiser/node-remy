@@ -33,11 +33,11 @@ npm i rummy --save
 `Remy` could be called with one or two arguments: `remy(path[, files])`.
 
 ```js
-var remy            = require('remy'),
-    cwd             = process.cwd(),
-    abortOnError    = false;
-    
-rm = remy(cwd, [
+const remy = require('remy');
+const cwd = process.cwd();
+const abortOnError = false;
+
+const rm = remy(cwd, [
     'LICENSE',
     'README.md',
     'package.json'
@@ -78,6 +78,15 @@ In case of starting example output should be similar to:
 100%
 Removing ended up
 ```
+
+## Environments
+
+In old `node.js` environments that supports `es5` only, `remy` could be used with:
+
+```js
+var remy = require('remy/legacy');
+```
+
 ## Related
 
 - [Copymitter](https://github.com/coderaiser/node-copymitter "Copymitter") - Copy files with emitter.
