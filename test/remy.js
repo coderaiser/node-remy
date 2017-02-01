@@ -130,3 +130,26 @@ test('file: find error', (t) => {
     });
 });
 
+test('remy: _progress', (t) => {
+    const name = path.join('/tmp', String(Math.random()));
+    
+    fs.writeFileSync(name, 'hello world');
+    
+    const rm = remy(name);
+    
+    rm.pause();
+    rm._n = 1;
+    rm._progress();
+    rm._percentPrev = 200;
+    rm._progress();
+    rm.continue();
+    
+    rm.on('progress', (n) => {
+        t.equal(n, 300, 'should emit progress once');
+    });
+    
+    rm.on('end', () => {
+        t.end();
+    });
+});
+
