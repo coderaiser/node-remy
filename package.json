@@ -7,6 +7,11 @@
     "remy": "legacy/bin/remy.js",
     "remy_": "bin/remy.js"
   },
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
+  },
   "scripts": {
     "6to5:lib": "babel lib -d legacy/lib",
     "6to5:bin": "babel bin -d legacy/bin",
