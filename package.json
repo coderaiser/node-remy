@@ -17,6 +17,7 @@
     "6to5:bin": "babel bin -d legacy/bin",
     "legacy:index": "echo \"module.exports = require('./lib/remy');\" > legacy/index.js",
     "build": "redrun 6to5:* legacy:*",
+    "wisdom": "npm run build",
     "lint:jscs": "jscs --esnext lib test",
     "lint:jshint": "jshint lib test",
     "lint:eslint": "eslint lib test",
