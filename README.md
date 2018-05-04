@@ -26,7 +26,7 @@ Good for making progress bars.
 ### Install
 
 ```
-npm i rummy --save
+npm i remy --save
 ```
 
 ### How to use?
