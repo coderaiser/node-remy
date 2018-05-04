@@ -35,7 +35,7 @@ test('folder: error EACESS', (t) => {
 
 test('folder: error SOME_ERROR', (t) => {
     const code = 'SOME_ERROR';
-    const rmdir = fs.rmdir;
+    const {rmdir} = fs;
     const name = path.join(os.tmpdir(), String(Math.random()));
      
     fs.mkdirSync(name);
