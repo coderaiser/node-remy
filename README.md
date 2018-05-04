@@ -47,11 +47,15 @@ const rm = remy(cwd, [
     'package.json'
 ]);
 
-rm.on('file', function(name) {
+rm.on('file', (name) => {
     console.log(name);
 });
 
-rm.on('progress', function(percent) {
+rm.on('directory', (name) => {
+    console.log(name);
+});
+
+rm.on('progress', (percent) => {
     console.log(percent);
     
     if (percent >= 50) {
@@ -60,14 +64,14 @@ rm.on('progress', function(percent) {
     }
 });
 
-rm.on('error', function(error,) {
+rm.on('error', (error,) => {
     if (abortOnError)
-        rm.abort();
-    else
-        rm.continue();
+        return rm.abort();
+    
+    rm.continue();
 });
 
-rm.on('end', function() {
+rm.on('end', () => {
     console.log('Removing ended up');
 });
 ```
