@@ -26,7 +26,7 @@
     "emitter"
   ],
   "dependencies": {
-    "findit": "^2.0.0",
+    "findit2": "^2.2.3",
     "glob": "^7.1.0"
   },
   "devDependencies": {
