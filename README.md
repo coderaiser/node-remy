@@ -31,10 +31,10 @@ npm i remy --save
 
 ### How to use?
 
-#### remy(path, names)
+#### remy(from[, names])
 
-- `path` - path to directory with files or directories to remove
-- `names` - `array` of file names
+- `from` - path to directory with files or directories to remove
+- `names` - `array` of file names (optional)
 
 ```js
 const remy = require('remy');
@@ -106,3 +106,4 @@ MIT
 [DependencyStatusURL]:      https://gemnasium.com/coderaiser/node-remy "Dependency Status"
 [LicenseURL]:               https://tldrlegal.com/license/mit-license "MIT License"
 [CoverageURL]:              https://coveralls.io/github/coderaiser/node-remy?branch=master
+

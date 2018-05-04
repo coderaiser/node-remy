@@ -12,16 +12,8 @@ test('remy: no args', (t) => {
     t.end();
 });
 
-test('remy: no files', (t) => {
-    const fn = () => remy('/hello', '/world');
-    t.throws(fn, /files should be an array!/, 'should throw when no args');
-    t.end();
-});
-
 test('file: error EACESS', (t) => {
-    const rm = remy('/bin', [
-        'ls'
-    ]);
+    const rm = remy('/bin/ls');
     
     rm.on('error', (error) => {
         t.equal(error.code, 'EACCES', error.message);
@@ -34,9 +26,7 @@ test('file: error EACESS', (t) => {
 });
 
 test('directory: error EACESS', (t) => {
-    const rm = remy('/', [
-        'bin'
-    ]);
+    const rm = remy('/bin');
     
     rm.on('error', (error) => {
         t.equal(error.code, 'EACCES', error.message);
@@ -51,23 +41,19 @@ test('directory: error EACESS', (t) => {
 test('directory: error SOME_ERROR', (t) => {
     const code = 'SOME_ERROR';
     const {rmdir} = fs;
-    const dir = os.tmpdir();
-    const name = String(Math.random());
-    const full = path.join(dir, name);
+    const name = path.join(os.tmpdir(), String(Math.random()));
      
-    fs.mkdirSync(full);
+    fs.mkdirSync(name);
     
     fs.rmdir = (name, callback) => {
         const error = Error('Some error');
         
-        error.code = code;
+        error.code  = code;
         
         callback(error);
     };
     
-    const rm = remy(dir, [
-        name,
-    ]);
+    const rm = remy(name);
     
     rm.on('error', (error) => {
         t.equal(error.code, code, error.message);
@@ -76,34 +62,29 @@ test('directory: error SOME_ERROR', (t) => {
     
     rm.on('end', () => {
         fs.rmdir = rmdir;
-        fs.rmdirSync(full);
+        fs.rmdirSync(name);
         t.end();
     });
 });
 
 test('file: no errors', (t) => {
-    const name = String(Math.random());
-    const dir = '/tmp';
-    const full = path.join(dir, name);
+    const name = path.join('/tmp', String(Math.random()));
     
-    fs.writeFileSync(full, 'hello world');
+    fs.writeFileSync(name, 'hello world');
     
-    const rm = remy(dir, [name]);
+    const rm = remy(name);
     
     rm.on('end', () => {
-        t.pass('should remove file');
         t.end();
     });
 });
 
 test('directory: no errors', (t) => {
-    const name = String(Math.random());
-    const dir = '/tmp';
-    const full = path.join(dir, name);
+    const name = path.join('/tmp', String(Math.random()));
     
-    fs.mkdirSync(full);
+    fs.mkdirSync(name);
     
-    const rm = remy(dir, [name]);
+    const rm = remy(name);
     
     rm.on('end', () => {
         t.end();
@@ -111,13 +92,11 @@ test('directory: no errors', (t) => {
 });
 
 test('pause/continue', (t) => {
-    const name = String(Math.random());
-    const dir = '/tmp';
-    const full = path.join(dir, name);
+    const name = path.join('/tmp', String(Math.random()));
     
-    fs.writeFileSync(full, 'hello world');
+    fs.writeFileSync(name, 'hello world');
     
-    const rm = remy('/tmp', [name]);
+    const rm = remy(name);
     
     rm.pause();
     
@@ -132,8 +111,7 @@ test('pause/continue', (t) => {
 });
 
 test('file: find error', (t) => {
-    const dir = '/tmp';
-    const name = String(Math.random());
+    const name = path.join('/tmp', String(Math.random()));
     const code = 'SOME';
     const lstat = fs.lstat;
     
@@ -147,7 +125,7 @@ test('file: find error', (t) => {
         });
     };
     
-    const rm = remy(dir, [name]);
+    const rm = remy(name);
     
     rm.on('error', (error) => {
         fs.lstat = lstat;
@@ -158,13 +136,11 @@ test('file: find error', (t) => {
 });
 
 test('remy: _progress', (t) => {
-    const dir = '/tmp';
-    const name = String(Math.random());
-    const full = path.join(dir, name);
+    const name = path.join('/tmp', String(Math.random()));
     
-    fs.writeFileSync(full, 'hello world');
+    fs.writeFileSync(name, 'hello world');
     
-    const rm = remy(dir, [name]);
+    const rm = remy(name);
     
     rm.pause();
     rm._n = 1;
