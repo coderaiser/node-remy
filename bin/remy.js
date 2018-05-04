@@ -27,17 +27,17 @@ else
 function main(name) {
     const rm = remy(name);
     
-    rm.on('error', function(error, name) {
-        console.error(name, ':', error.message);
+    rm.on('error', (error) => {
+        console.error(error.message);
         rm.continue();
     });
     
     rm.on('progress', (percent) => {
-        console.log(percent + '%');
+        process.stdout.write(`\r${percent}%`);
     });
     
     rm.on('end', () => {
-        console.log('Done.');
+        process.stdout.write('\n');
     });
 }
 
