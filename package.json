@@ -7,8 +7,9 @@
     "remy": "bin/remy.js"
   },
   "scripts": {
-    "lint:eslint": "eslint lib test",
-    "lint:eslint:bin": "eslint --rule 'no-console:0' bin",
+    "lint:lib": "eslint lib",
+    "lint:test": "eslint test -c .eslintrc.test",
+    "lint:bin": "eslint --rule 'no-console:0' bin",
     "lint": "redrun lint:*",
     "test": "tape test/*.js",
     "coverage": "nyc npm test",
