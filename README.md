@@ -30,7 +30,11 @@ npm i rummy --save
 ```
 
 ### How to use?
-`Remy` can be called with one or two arguments: `remy(path)`.
+
+#### remy(path, names)
+
+- `path` - path to directory with files or directories to remove
+- `names` - `array` of file names
 
 ```js
 const remy = require('remy');
