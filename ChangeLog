@@ -1,3 +1,16 @@
+2018.05.04, v3.0.0
+
+fix:
+- (remy) rmOneDir
+
+feature:
+- (eslintrc) add test
+- (remy) drop support of one argument
+- (package) replaced findit with findit2
+- (remy) drop support of node < 4
+- (remy) remove rimraf: improved progress of removing
+
+
 2018.05.02, v2.0.2
 
 fix:
