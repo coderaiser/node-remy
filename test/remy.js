@@ -20,7 +20,7 @@ test('file: error EACESS', (t) => {
     });
 });
 
-test('folder: error EACESS', (t) => {
+test('directory: error EACESS', (t) => {
     const rm = remy('/bin');
     
     rm.on('error', (error) => {
@@ -33,7 +33,7 @@ test('folder: error EACESS', (t) => {
     });
 });
 
-test('folder: error SOME_ERROR', (t) => {
+test('directory: error SOME_ERROR', (t) => {
     const code = 'SOME_ERROR';
     const {rmdir} = fs;
     const name = path.join(os.tmpdir(), String(Math.random()));
@@ -74,7 +74,7 @@ test('file: no errors', (t) => {
     });
 });
 
-test('folder: no errors', (t) => {
+test('directory: no errors', (t) => {
     const name = path.join('/tmp', String(Math.random()));
     
     fs.mkdirSync(name);
