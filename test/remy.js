@@ -7,8 +7,21 @@ const os = require('os');
 const path = require('path');
 const fs = require('fs');
 
+test('remy: no args', (t) => {
+    t.throws(remy, /from should be a string!/, 'should throw when no args');
+    t.end();
+});
+
+test('remy: no files', (t) => {
+    const fn = () => remy('/hello', '/world');
+    t.throws(fn, /files should be an array!/, 'should throw when no args');
+    t.end();
+});
+
 test('file: error EACESS', (t) => {
-    const rm = remy('/bin/ls');
+    const rm = remy('/bin', [
+        'ls'
+    ]);
     
     rm.on('error', (error) => {
         t.equal(error.code, 'EACCES', error.message);
@@ -21,7 +34,9 @@ test('file: error EACESS', (t) => {
 });
 
 test('directory: error EACESS', (t) => {
-    const rm = remy('/bin');
+    const rm = remy('/', [
+        'bin'
+    ]);
     
     rm.on('error', (error) => {
         t.equal(error.code, 'EACCES', error.message);
@@ -36,19 +51,23 @@ test('directory: error EACESS', (t) => {
 test('directory: error SOME_ERROR', (t) => {
     const code = 'SOME_ERROR';
     const {rmdir} = fs;
-    const name = path.join(os.tmpdir(), String(Math.random()));
+    const dir = os.tmpdir();
+    const name = String(Math.random());
+    const full = path.join(dir, name);
      
-    fs.mkdirSync(name);
+    fs.mkdirSync(full);
     
     fs.rmdir = (name, callback) => {
         const error = Error('Some error');
         
-        error.code  = code;
+        error.code = code;
         
         callback(error);
     };
     
-    const rm = remy(name);
+    const rm = remy(dir, [
+        name,
+    ]);
     
     rm.on('error', (error) => {
         t.equal(error.code, code, error.message);
@@ -57,29 +76,34 @@ test('directory: error SOME_ERROR', (t) => {
     
     rm.on('end', () => {
         fs.rmdir = rmdir;
-        fs.rmdirSync(name);
+        fs.rmdirSync(full);
         t.end();
     });
 });
 
 test('file: no errors', (t) => {
-    const name = path.join('/tmp', String(Math.random()));
+    const name = String(Math.random());
+    const dir = '/tmp';
+    const full = path.join(dir, name);
     
-    fs.writeFileSync(name, 'hello world');
+    fs.writeFileSync(full, 'hello world');
     
-    const rm = remy(name);
+    const rm = remy(dir, [name]);
     
     rm.on('end', () => {
+        t.pass('should remove file');
         t.end();
     });
 });
 
 test('directory: no errors', (t) => {
-    const name = path.join('/tmp', String(Math.random()));
+    const name = String(Math.random());
+    const dir = '/tmp';
+    const full = path.join(dir, name);
     
-    fs.mkdirSync(name);
+    fs.mkdirSync(full);
     
-    const rm = remy(name);
+    const rm = remy(dir, [name]);
     
     rm.on('end', () => {
         t.end();
@@ -87,11 +111,13 @@ test('directory: no errors', (t) => {
 });
 
 test('pause/continue', (t) => {
-    const name = path.join('/tmp', String(Math.random()));
+    const name = String(Math.random());
+    const dir = '/tmp';
+    const full = path.join(dir, name);
     
-    fs.writeFileSync(name, 'hello world');
+    fs.writeFileSync(full, 'hello world');
     
-    const rm = remy(name);
+    const rm = remy('/tmp', [name]);
     
     rm.pause();
     
@@ -106,7 +132,8 @@ test('pause/continue', (t) => {
 });
 
 test('file: find error', (t) => {
-    const name = path.join('/tmp', String(Math.random()));
+    const dir = '/tmp';
+    const name = String(Math.random());
     const code = 'SOME';
     const lstat = fs.lstat;
     
@@ -120,7 +147,7 @@ test('file: find error', (t) => {
         });
     };
     
-    const rm = remy(name);
+    const rm = remy(dir, [name]);
     
     rm.on('error', (error) => {
         fs.lstat = lstat;
@@ -131,11 +158,13 @@ test('file: find error', (t) => {
 });
 
 test('remy: _progress', (t) => {
-    const name = path.join('/tmp', String(Math.random()));
+    const dir = '/tmp';
+    const name = String(Math.random());
+    const full = path.join(dir, name);
     
-    fs.writeFileSync(name, 'hello world');
+    fs.writeFileSync(full, 'hello world');
     
-    const rm = remy(name);
+    const rm = remy(dir, [name]);
     
     rm.pause();
     rm._n = 1;
