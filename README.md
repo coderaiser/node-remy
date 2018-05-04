@@ -20,7 +20,7 @@ Options:
 
 ## Local
 
-`Remy` could be used localy. It will emit event on every copied file.
+`Remy` can be used localy. It will emit event on every copied file.
 Good for making progress bars.
 
 ### Install
@@ -30,7 +30,7 @@ npm i rummy --save
 ```
 
 ### How to use?
-`Remy` could be called with one or two arguments: `remy(path[, files])`.
+`Remy` can be called with one or two arguments: `remy(path)`.
 
 ```js
 const remy = require('remy');
