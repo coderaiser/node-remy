@@ -4,20 +4,9 @@
   "description": "remove files with emitter",
   "main": "lib/remy.js",
   "bin": {
-    "remy": "legacy/bin/remy.js",
-    "remy_": "bin/remy.js"
-  },
-  "babel": {
-    "presets": [
-      "env"
-    ]
+    "remy": "bin/remy.js"
   },
   "scripts": {
-    "6to5:lib": "babel lib -d legacy/lib",
-    "6to5:bin": "babel bin -d legacy/bin",
-    "legacy:index": "echo \"module.exports = require('./lib/remy');\" > legacy/index.js",
-    "build": "redrun 6to5:* legacy:*",
-    "wisdom": "npm run build",
     "lint:eslint": "eslint lib test",
     "lint:eslint:bin": "eslint --rule 'no-console:0' bin",
     "lint": "redrun lint:*",
@@ -41,8 +30,6 @@
     "glob": "^7.1.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.22.2",
-    "babel-preset-env": "^1.6.1",
     "coveralls": "^3.0.0",
     "eslint": "^4.0.0",
     "eslint-plugin-node": "^6.0.1",
@@ -50,6 +37,9 @@
     "nyc": "^11.0.2",
     "redrun": "^6.0.0",
     "tape": "^4.2.2"
+  },
+  "engines": {
+    "node": ">=4.0.0"
   },
   "author": "coderaiser <mnemonic.enemy@gmail.com> (http://coderaiser.github.io/)",
   "license": "MIT",

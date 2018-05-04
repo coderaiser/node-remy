@@ -4,7 +4,7 @@ Remove files with emitter.
 
 ## Global
 
-`remy` could be installed global with
+`remy` can be installed globally with
 
 ```
 npm i remy -g
@@ -75,14 +75,6 @@ In case of starting example output should be similar to:
 67%
 100%
 Removing ended up
-```
-
-## Environments
-
-In old `node.js` environments that supports `es5` only, `remy` could be used with:
-
-```js
-var remy = require('remy/legacy');
 ```
 
 ## Related
