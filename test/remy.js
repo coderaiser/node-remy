@@ -1,11 +1,12 @@
 'use strict';
 
-const test = require('tape');
-const remy = require('..');
-
 const os = require('os');
 const path = require('path');
 const fs = require('fs');
+
+const tryCatch = require('try-catch');
+const test = require('tape');
+const remy = require('..');
 
 test('remy: no args', (t) => {
     t.throws(remy, /from should be a string!/, 'should throw when no args');
@@ -154,6 +155,40 @@ test('remy: _progress', (t) => {
     });
     
     rm.on('end', () => {
+        t.end();
+    });
+});
+
+test('remy: EPERM', (t) => {
+    const name = path.join(os.tmpdir(), String(Math.random()));
+    fs.mkdirSync(name);
+    
+    const {unlink} = fs;
+    
+    fs.unlink = (a, fn) => {
+        const e = Error('EPERM: operation not permitted, unlink \'/tmp/1\'');
+        e.code = 'EPERM';
+        
+        fn(e);
+    };
+    
+    const rm = remy(name);
+    
+    rm.on('error', (e) => {
+        fs.rmdirSync(name);
+        fs.unlink = unlink;
+        
+        t.fail(e.message);
+        t.end();
+    });
+    
+    rm.on('end', () => {
+        fs.unlink = unlink;
+        t.pass('should catch EPERM');
+        
+        const [e] = tryCatch(fs.statSync, name);
+        
+        t.ok(e, 'should remove directory');
         t.end();
     });
 });

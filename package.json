@@ -27,8 +27,10 @@
     "emitter"
   ],
   "dependencies": {
+    "currify": "^2.0.6",
     "findit2": "^2.2.3",
-    "glob": "^7.1.0"
+    "glob": "^7.1.0",
+    "wraptile": "^2.0.0"
   },
   "devDependencies": {
     "coveralls": "^3.0.0",
@@ -37,7 +39,8 @@
     "nodemon": "^1.11.0",
     "nyc": "^11.0.2",
     "redrun": "^6.0.0",
-    "tape": "^4.2.2"
+    "tape": "^4.2.2",
+    "try-catch": "^2.0.0"
   },
   "engines": {
     "node": ">=4.0.0"
