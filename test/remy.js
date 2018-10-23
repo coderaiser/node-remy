@@ -4,6 +4,8 @@ const os = require('os');
 const path = require('path');
 const fs = require('fs');
 
+const mockRequire = require('mock-require');
+const {reRequire} = mockRequire;
 const tryCatch = require('try-catch');
 const test = require('tape');
 const remy = require('..');
@@ -54,6 +56,7 @@ test('directory: error SOME_ERROR', (t) => {
         callback(error);
     };
     
+    const remy = reRequire('..');
     const rm = remy(name);
     
     rm.on('error', (error) => {
@@ -99,12 +102,43 @@ test('pause/continue', (t) => {
     
     const rm = remy(name);
     
-    rm.pause();
+    rm.on('file', () => {
+        rm.pause();
+        t.ok(rm._pause, 'pause good');
+        
+        rm.continue();
+        t.notOk(rm._pause, 'continue good');
+    });
     
-    t.ok(rm._pause, 'pause good');
+    rm.on('end', () => {
+        t.end();
+    });
+});
+
+test('pause/continue: couple files', (t) => {
+    const name1 = String(Math.random());
+    const name2 = String(Math.random());
     
-    rm.continue();
-    t.notOk(rm._pause, 'continue good');
+    const full1 = path.join('/tmp', name1);
+    const full2 = path.join('/tmp', name2);
+    
+    fs.writeFileSync(full1, 'hello world1');
+    fs.writeFileSync(full2, 'hello world2');
+    
+    const rm = remy('/tmp', [
+        name1,
+        name2,
+    ]);
+    
+    rm.once('file', () => {
+        rm.pause();
+        t.ok(rm._pause, 'pause good');
+        
+        process.nextTick(() => {
+            rm.continue();
+            t.notOk(rm._pause, 'continue good');
+        });
+    });
     
     rm.on('end', () => {
         t.end();
