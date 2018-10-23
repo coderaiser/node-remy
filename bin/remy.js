@@ -42,7 +42,7 @@ function main(name) {
 }
 
 function version() {
-    console.log('v' + info().version);
+    console.log(`v${info().version}`);
 }
 
 function info() {
@@ -51,13 +51,13 @@ function info() {
 
 function help() {
     const bin = require('../json/bin');
-    const usage = 'Usage: ' + info().name + ' [path]';
+    const usage = `Usage: ${info().name} [path]`;
     
     console.log(usage);
     console.log('Options:');
     
     Object.keys(bin).forEach((name) => {
-        const line = '  ' + name + ' ' + bin[name];
+        const line = `  ${name} ${bin[name]}`;
         console.log(line);
     });
 }
