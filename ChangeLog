@@ -1,3 +1,9 @@
+2018.10.23, v4.1.0
+
+feature:
+- (remy) callbacks -> async-await
+
+
 2018.10.11, v4.0.3
 
 feature:
