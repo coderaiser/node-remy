@@ -1,3 +1,13 @@
+2019.10.16, v5.0.0
+
+feature:
+- (remy) drop support of node < 10
+- (package) try-to-catch v2.0.0
+- (package) nyc v14.1.1
+- (package) eslint v6.5.1
+- (package) eslint-plugin-node v10.0.0
+
+
 2018.10.23, v4.1.0
 
 feature:

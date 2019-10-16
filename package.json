@@ -1,6 +1,6 @@
 {
   "name": "remy",
-  "version": "4.1.0",
+  "version": "5.0.0",
   "description": "remove files with emitter",
   "main": "lib/remy.js",
   "bin": {
