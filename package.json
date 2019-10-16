@@ -7,16 +7,16 @@
     "remy": "bin/remy.js"
   },
   "scripts": {
-    "lint:lib": "eslint lib",
-    "lint:test": "eslint test -c .eslintrc.test",
-    "lint:bin": "eslint --rule 'no-console:0' bin",
-    "lint": "redrun lint:*",
-    "test": "tape test/*.js",
-    "coverage": "nyc npm test",
-    "report": "nyc report --reporter=text-lcov | coveralls",
-    "watch:coverage": "npm run watcher -- npm run coverage",
-    "watch:test": "npm run watcher -- npm test",
-    "watcher": "nodemon -w test -w lib --exec"
+    "lint": "madrun lint",
+    "lint:test": "madrun lint:test",
+    "lint:bin": "madrun lint:bin",
+    "fix:lint": "madrun fix:lint",
+    "test": "madrun test",
+    "coverage": "madrun coverage",
+    "report": "madrun report",
+    "watch:coverage": "madrun watch:coverage",
+    "watch:test": "madrun watch:test",
+    "watcher": "madrun watcher"
   },
   "repository": {
     "type": "git",
@@ -35,15 +35,18 @@
     "coveralls": "^3.0.0",
     "eslint": "^6.5.1",
     "eslint-plugin-node": "^10.0.0",
+    "eslint-plugin-putout": "^2.0.1",
+    "madrun": "^3.0.6",
     "mock-require": "^3.0.2",
     "nodemon": "^1.11.0",
     "nyc": "^14.1.1",
+    "putout": "^6.15.1",
     "redrun": "^7.0.0",
-    "tape": "^4.2.2",
+    "supertape": "^1.2.3",
     "try-catch": "^2.0.0"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=10"
   },
   "author": "coderaiser <mnemonic.enemy@gmail.com> (http://coderaiser.github.io/)",
   "license": "MIT",

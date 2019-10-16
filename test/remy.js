@@ -4,10 +4,9 @@ const os = require('os');
 const path = require('path');
 const fs = require('fs');
 
-const mockRequire = require('mock-require');
-const {reRequire} = mockRequire;
+const {reRequire} = require('mock-require');
 const tryCatch = require('try-catch');
-const test = require('tape');
+const test = require('supertape');
 const remy = require('..');
 
 test('remy: no args', (t) => {
@@ -43,17 +42,15 @@ test('directory: error EACESS', (t) => {
 
 test('directory: error SOME_ERROR', (t) => {
     const code = 'SOME_ERROR';
-    const {rmdir} = fs;
+    const {rmdir} = fs.promises;
     const name = path.join(os.tmpdir(), String(Math.random()));
-     
+    
     fs.mkdirSync(name);
     
-    fs.rmdir = (name, callback) => {
+    fs.promises.rmdir = async () => {
         const error = Error('Some error');
-        
-        error.code  = code;
-        
-        callback(error);
+        error.code = code;
+        throw error;
     };
     
     const remy = reRequire('..');
@@ -65,7 +62,7 @@ test('directory: error SOME_ERROR', (t) => {
     });
     
     rm.on('end', () => {
-        fs.rmdir = rmdir;
+        fs.promises.rmdir = rmdir;
         fs.rmdirSync(name);
         t.end();
     });
@@ -148,7 +145,7 @@ test('pause/continue: couple files', (t) => {
 test('file: find error', (t) => {
     const name = path.join('/tmp', String(Math.random()));
     const code = 'SOME';
-    const lstat = fs.lstat;
+    const {lstat} = fs;
     
     fs.lstat = (name, fn) => {
         const error = Error('Some error');

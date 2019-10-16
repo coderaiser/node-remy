@@ -4,16 +4,15 @@
 
 const remy = require('..');
 const glob = require('glob');
-const args = process.argv.slice(2);
-const arg = args[0];
+const [arg] = process.argv.slice(2);
 
 if (/^-(v|-version)$/.test(arg))
     version();
-else if (!arg ||  /^-(h|-help)$/.test(arg))
+else if (!arg || /^-(h|-help)$/.test(arg))
     help();
 else
     glob(arg, (error, files) => {
-        const name = files[0];
+        const [name] = files;
         
         if (!name)
             error = Error('file not found');
@@ -23,7 +22,7 @@ else
         
         main(name);
     });
-   
+
 function main(name) {
     const rm = remy(name);
     
@@ -56,8 +55,8 @@ function help() {
     console.log(usage);
     console.log('Options:');
     
-    Object.keys(bin).forEach((name) => {
+    for (const name of Object.keys(bin)) {
         const line = `  ${name} ${bin[name]}`;
         console.log(line);
-    });
+    }
 }
