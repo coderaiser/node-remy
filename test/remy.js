@@ -217,9 +217,9 @@ test('remy: EPERM', (t) => {
         fs.unlink = unlink;
         t.pass('should catch EPERM');
         
-        const [e] = tryCatch(fs.statSync, name);
+        const [noDir] = tryCatch(fs.statSync, name);
         
-        t.ok(e, 'should remove directory');
+        t.ok(noDir, 'should remove directory');
         t.end();
     });
 });
