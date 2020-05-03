@@ -1,5 +1,7 @@
 'use strict';
 
+const {once} = require('events');
+
 const os = require('os');
 const path = require('path');
 const fs = require('fs');
@@ -7,6 +9,7 @@ const fs = require('fs');
 const {reRequire} = require('mock-require');
 const tryCatch = require('try-catch');
 const test = require('supertape');
+const wait = require('@iocmd/wait');
 const remy = require('..');
 
 test('remy: no args', (t) => {
@@ -14,37 +17,44 @@ test('remy: no args', (t) => {
     t.end();
 });
 
-test('file: error EACESS', (t) => {
+test('file: error EACESS', async (t) => {
     const rm = remy('/bin/ls');
+    const abort = rm.abort.bind(rm);
     
-    rm.on('error', (error) => {
-        t.equal(error.code, 'EACCES', error.message);
-        rm.abort();
-    });
+    const [result] = await Promise.all([
+        once(rm, 'error'),
+        once(rm, 'end'),
+        wait(abort),
+    ]);
+     
+    const [error] = result;
     
-    rm.on('end', () => {
-        t.end();
-    });
+    t.equal(error.code, 'EACCES', error.message);
+    t.end();
 });
 
-test('directory: error EACESS', (t) => {
+test('directory: error EACESS', async (t) => {
     const rm = remy('/bin');
+    const abort = rm.abort.bind(rm);
     
-    rm.on('error', (error) => {
-        t.equal(error.code, 'EACCES', error.message);
-        rm.abort();
-    });
+    const [result] = await Promise.all([
+        once(rm, 'error'),
+        once(rm, 'end'),
+        wait(abort),
+    ]);
     
-    rm.on('end', () => {
-        t.end();
-    });
+    const [error] = result;
+     
+    t.equal(error.code, 'EACCES', error.message);
+    t.end();
 });
 
-test('directory: error SOME_ERROR', (t) => {
+test('directory: error SOME_ERROR', async (t) => {
     const code = 'SOME_ERROR';
-    const {rmdir} = fs.promises;
-    const name = path.join(os.tmpdir(), String(Math.random()));
     
+    const {rmdir} = fs.promises;
+    
+    const name = path.join(os.tmpdir(), String(Math.random()));
     fs.mkdirSync(name);
     
     fs.promises.rmdir = async () => {
@@ -55,77 +65,65 @@ test('directory: error SOME_ERROR', (t) => {
     
     const remy = reRequire('..');
     const rm = remy(name);
+    const abort = rm.abort.bind(rm);
     
-    rm.on('error', (error) => {
-        t.equal(error.code, code, error.message);
-        rm.abort();
-    });
+    const [result] = await Promise.all([
+        once(rm, 'error'),
+        once(rm, 'end'),
+        wait(abort),
+    ]);
     
-    rm.on('end', () => {
-        fs.promises.rmdir = rmdir;
-        fs.rmdirSync(name);
-        t.end();
-    });
+    const [error] = result;
+    
+    fs.promises.rmdir = rmdir;
+    fs.rmdirSync(name);
+    
+    t.equal(error.code, code, error.message);
+    t.end();
 });
 
-test('file: no errors', (t) => {
+test('file: no errors', async (t) => {
     const name = path.join('/tmp', String(Math.random()));
-    
     fs.writeFileSync(name, 'hello world');
-    
     const rm = remy(name);
     
-    rm.on('end', () => {
-        t.end();
-    });
+    await once(rm, 'end');
+    t.pass('no errors');
+    t.end();
 });
 
-test('directory: no errors', (t) => {
+test('directory: no errors', async (t) => {
     const name = path.join('/tmp', String(Math.random()));
-    
     fs.mkdirSync(name);
-    
     const rm = remy(name);
-    
-    rm.on('end', () => {
-        t.end();
-    });
+    await once(rm, 'end');
+    t.end();
 });
 
-test('pause/continue', (t) => {
+test('pause/continue', async (t) => {
     const name = path.join('/tmp', String(Math.random()));
-    
     fs.writeFileSync(name, 'hello world');
-    
     const rm = remy(name);
     
     rm.on('file', () => {
         rm.pause();
         t.ok(rm._pause, 'pause good');
-        
         rm.continue();
         t.notOk(rm._pause, 'continue good');
     });
     
-    rm.on('end', () => {
-        t.end();
-    });
+    await once(rm, 'end');
+    t.end();
 });
 
-test('pause/continue: couple files', (t) => {
+test('pause/continue: couple files', async (t) => {
     const name1 = String(Math.random());
     const name2 = String(Math.random());
-    
     const full1 = path.join('/tmp', name1);
     const full2 = path.join('/tmp', name2);
-    
     fs.writeFileSync(full1, 'hello world1');
     fs.writeFileSync(full2, 'hello world2');
-    
-    const rm = remy('/tmp', [
-        name1,
-        name2,
-    ]);
+    const rm = remy('/tmp', [name1, name2]);
     
     rm.once('file', () => {
         rm.pause();
@@ -137,19 +135,18 @@ test('pause/continue: couple files', (t) => {
         });
     });
     
-    rm.on('end', () => {
-        t.end();
-    });
+    await once(rm, 'end');
+    t.end();
 });
 
-test('file: find error', (t) => {
+test('file: find error', async (t) => {
     const name = path.join('/tmp', String(Math.random()));
     const code = 'SOME';
+    
     const {lstat} = fs;
     
     fs.lstat = (name, fn) => {
         const error = Error('Some error');
-        
         error.code = code;
         
         process.nextTick(() => {
@@ -158,20 +155,15 @@ test('file: find error', (t) => {
     };
     
     const rm = remy(name);
-    
-    rm.on('error', (error) => {
-        fs.lstat = lstat;
-        
-        t.equal(error.code, 'ENOENT', error);
-        t.end();
-    });
+    const [error] = await once(rm, 'error');
+    fs.lstat = lstat;
+    t.equal(error.code, 'ENOENT', error);
+    t.end();
 });
 
-test('remy: _progress', (t) => {
+test('remy: _progress', async (t) => {
     const name = path.join('/tmp', String(Math.random()));
-    
     fs.writeFileSync(name, 'hello world');
-    
     const rm = remy(name);
     
     rm.pause();
@@ -181,46 +173,14 @@ test('remy: _progress', (t) => {
     rm._progress();
     rm.continue();
     
-    rm.on('progress', (n) => {
-        t.equal(n, 300, 'should emit progress once');
-    });
+    const [result] = await Promise.all([
+        once(rm, 'progress'),
+        once(rm, 'end'),
+    ]);
     
-    rm.on('end', () => {
-        t.end();
-    });
-});
-
-test('remy: EPERM', (t) => {
-    const name = path.join(os.tmpdir(), String(Math.random()));
-    fs.mkdirSync(name);
+    const [n] = result;
     
-    const {unlink} = fs;
-    
-    fs.unlink = (a, fn) => {
-        const e = Error('EPERM: operation not permitted, unlink \'/tmp/1\'');
-        e.code = 'EPERM';
-        
-        fn(e);
-    };
-    
-    const rm = remy(name);
-    
-    rm.on('error', (e) => {
-        fs.rmdirSync(name);
-        fs.unlink = unlink;
-        
-        t.fail(e.message);
-        t.end();
-    });
-    
-    rm.on('end', () => {
-        fs.unlink = unlink;
-        t.pass('should catch EPERM');
-        
-        const [noDir] = tryCatch(fs.statSync, name);
-        
-        t.ok(noDir, 'should remove directory');
-        t.end();
-    });
+    t.equal(n, 300, 'should emit progress once');
+    t.end();
 });
 
