@@ -7,7 +7,6 @@ const path = require('path');
 const fs = require('fs');
 
 const {reRequire} = require('mock-require');
-const tryCatch = require('try-catch');
 const test = require('supertape');
 const wait = require('@iocmd/wait');
 const remy = require('..');
@@ -26,7 +25,7 @@ test('file: error EACESS', async (t) => {
         once(rm, 'end'),
         wait(abort),
     ]);
-     
+    
     const [error] = result;
     
     t.equal(error.code, 'EACCES', error.message);
@@ -44,7 +43,7 @@ test('directory: error EACESS', async (t) => {
     ]);
     
     const [error] = result;
-     
+    
     t.equal(error.code, 'EACCES', error.message);
     t.end();
 });
@@ -105,14 +104,17 @@ test('pause/continue', async (t) => {
     fs.writeFileSync(name, 'hello world');
     const rm = remy(name);
     
-    rm.on('file', () => {
-        rm.pause();
-        t.ok(rm._pause, 'pause good');
-        rm.continue();
-        t.notOk(rm._pause, 'continue good');
-    });
+    await Promise.all([
+        once(rm, 'file'),
+        once(rm, 'end'),
+    ]);
     
-    await once(rm, 'end');
+    rm.pause();
+    
+    t.ok(rm._pause, 'pause good');
+    rm.continue();
+    
+    t.notOk(rm._pause, 'continue good');
     t.end();
 });
 
