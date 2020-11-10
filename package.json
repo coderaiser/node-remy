@@ -40,7 +40,7 @@
   "devDependencies": {
     "@iocmd/wait": "^1.0.0",
     "coveralls": "^3.0.0",
-    "eslint": "^7.6.0",
+    "eslint": "^7.13.0",
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-putout": "^5.0.1",
     "madrun": "^7.0.2",
