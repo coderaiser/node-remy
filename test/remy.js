@@ -51,10 +51,10 @@ test('directory: error EACESS', async (t) => {
 test('directory: error SOME_ERROR', async (t) => {
     const code = 'SOME_ERROR';
     
-    const {rmdir} = fs.promises;
+    const {mkdir, rmdir} = fs.promises;
     
     const name = path.join(os.tmpdir(), String(Math.random()));
-    fs.mkdirSync(name);
+    await mkdir(name);
     
     fs.promises.rmdir = async () => {
         const error = Error('Some error');
@@ -66,16 +66,16 @@ test('directory: error SOME_ERROR', async (t) => {
     const rm = remy(name);
     const abort = rm.abort.bind(rm);
     
+    const time = 100;
     const [result] = await Promise.all([
         once(rm, 'error'),
-        once(rm, 'end'),
-        wait(abort),
+        wait(time, abort),
     ]);
     
     const [error] = result;
     
     fs.promises.rmdir = rmdir;
-    fs.rmdirSync(name);
+    await rmdir(name);
     
     t.equal(error.code, code, error.message);
     t.end();
