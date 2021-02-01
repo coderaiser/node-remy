@@ -18,12 +18,6 @@
     "watch:test": "madrun watch:test",
     "watcher": "madrun watcher"
   },
-  "nyc": {
-    "exclude": [
-      "test",
-      ".*.js"
-    ]
-  },
   "repository": {
     "type": "git",
     "url": "git://github.com/coderaiser/node-remy.git"
@@ -52,7 +46,7 @@
     "try-catch": "^3.0.0"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=14"
   },
   "author": "coderaiser <mnemonic.enemy@gmail.com> (http://coderaiser.github.io/)",
   "license": "MIT",

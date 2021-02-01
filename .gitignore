@@ -3,3 +3,5 @@ npm-debug.log
 .nyc_output
 .putoutcache
 
+*.swp
+yarn-error.log

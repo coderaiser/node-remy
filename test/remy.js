@@ -1,5 +1,7 @@
 'use strict';
 
+const tryCatch = require('try-catch');
+
 const {once} = require('events');
 
 const os = require('os');
@@ -12,7 +14,8 @@ const wait = require('@iocmd/wait');
 const remy = require('..');
 
 test('remy: no args', (t) => {
-    t.throws(remy, /from should be a string!/, 'should throw when no args');
+    const [error] = tryCatch(remy);
+    t.equal(error.message, 'from should be a string!', 'should throw when no args');
     t.end();
 });
 
