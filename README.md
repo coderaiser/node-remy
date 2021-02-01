@@ -1,6 +1,6 @@
 # Remy [![License][LicenseIMGURL]][LicenseURL] [![NPM version][NPMIMGURL]][NPMURL] [![Dependency Status][DependencyStatusIMGURL]][DependencyStatusURL] [![Build Status][BuildStatusIMGURL]][BuildStatusURL] [![Coverage Status][CoverageIMGURL]][CoverageURL]
 
-Remove files with emitter.
+Remove files with emitter (also in `zip` packages).
 
 ## Global
 
