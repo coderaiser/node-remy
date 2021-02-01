@@ -1,91 +1,75 @@
 'use strict';
 
-const tryCatch = require('try-catch');
-
 const {once} = require('events');
-
 const os = require('os');
-const path = require('path');
+const {join} = require('path');
 const fs = require('fs');
+const {
+    mkdir,
+    readFile,
+    writeFile,
+} = require('fs/promises');
 
-const {reRequire} = require('mock-require');
-const test = require('supertape');
-const wait = require('@iocmd/wait');
+const tryCatch = require('try-catch');
+const {test, stub} = require('supertape');
+const mockRequire = require('mock-require');
+const {read} = require('redzip');
+const tryToCatch = require('try-to-catch');
+
 const remy = require('..');
+
+const {stopAll, reRequire} = mockRequire;
+const {assign} = Object;
 
 test('remy: no args', (t) => {
     const [error] = tryCatch(remy);
+    
     t.equal(error.message, 'from should be a string!', 'should throw when no args');
     t.end();
 });
 
 test('file: error EACESS', async (t) => {
     const rm = remy('/bin/ls');
-    const abort = rm.abort.bind(rm);
+    const [error] = await once(rm, 'error');
     
-    const [result] = await Promise.all([
-        once(rm, 'error'),
-        once(rm, 'end'),
-        wait(abort),
-    ]);
-    
-    const [error] = result;
-    
-    t.equal(error.code, 'EACCES', error.message);
+    t.ok(error);
     t.end();
 });
 
 test('directory: error EACESS', async (t) => {
     const rm = remy('/bin');
-    const abort = rm.abort.bind(rm);
+    const [error] = await once(rm, 'error');
     
-    const [result] = await Promise.all([
-        once(rm, 'error'),
-        once(rm, 'end'),
-        wait(abort),
-    ]);
-    
-    const [error] = result;
-    
-    t.equal(error.code, 'EACCES', error.message);
+    t.ok(error);
     t.end();
 });
 
 test('directory: error SOME_ERROR', async (t) => {
     const code = 'SOME_ERROR';
+    const name = join(os.tmpdir(), String(Math.random()));
     
-    const {mkdir, rmdir} = fs.promises;
+    const mockedError = assign(Error('Some error'), {
+        code,
+    });
     
-    const name = path.join(os.tmpdir(), String(Math.random()));
-    await mkdir(name);
+    const remove = stub().throws(mockedError);
     
-    fs.promises.rmdir = async () => {
-        const error = Error('Some error');
-        error.code = code;
-        throw error;
-    };
+    mockRequire('redzip', {
+        remove,
+    });
     
     const remy = reRequire('..');
     const rm = remy(name);
-    const abort = rm.abort.bind(rm);
+    const [error] = await once(rm, 'error');
     
-    const time = 100;
-    const [result] = await Promise.all([
-        once(rm, 'error'),
-        wait(time, abort),
-    ]);
+    stopAll();
     
-    const [error] = result;
-    
-    fs.promises.rmdir = rmdir;
-    await rmdir(name);
-    
-    t.equal(error.code, code, error.message);
+    t.equal(error, mockedError);
     t.end();
 });
 
 test('file: no errors', async (t) => {
-    const name = path.join('/tmp', String(Math.random()));
+    const name = join('/tmp', String(Math.random()));
     fs.writeFileSync(name, 'hello world');
     const rm = remy(name);
     
@@ -95,20 +79,23 @@ test('file: no errors', async (t) => {
 });
 
 test('directory: no errors', async (t) => {
-    const name = path.join('/tmp', String(Math.random()));
-    fs.mkdirSync(name);
+    const name = join(__dirname, 'fixture', 'directory-no-errors');
+    await mkdir(name, {
+        recursive: true,
+    });
+    
     const rm = remy(name);
     await once(rm, 'end');
+    
     t.end();
 });
 
 test('pause/continue', async (t) => {
-    const name = path.join('/tmp', String(Math.random()));
+    const name = join('/tmp', String(Math.random()));
     fs.writeFileSync(name, 'hello world');
     const rm = remy(name);
     
     await Promise.all([
-        once(rm, 'file'),
         once(rm, 'end'),
     ]);
     
@@ -124,8 +111,8 @@ test('pause/continue', async (t) => {
 test('pause/continue: couple files', async (t) => {
     const name1 = String(Math.random());
     const name2 = String(Math.random());
-    const full1 = path.join('/tmp', name1);
-    const full2 = path.join('/tmp', name2);
+    const full1 = join('/tmp', name1);
+    const full2 = join('/tmp', name2);
     fs.writeFileSync(full1, 'hello world1');
     fs.writeFileSync(full2, 'hello world2');
     const rm = remy('/tmp', [name1, name2]);
@@ -145,7 +132,7 @@ test('pause/continue: couple files', async (t) => {
 });
 
 test('file: find error', async (t) => {
-    const name = path.join('/tmp', String(Math.random()));
+    const name = join('/tmp', String(Math.random()));
     const code = 'SOME';
     
     const {lstat} = fs;
@@ -167,7 +154,7 @@ test('file: find error', async (t) => {
 });
 
 test('remy: _progress', async (t) => {
-    const name = path.join('/tmp', String(Math.random()));
+    const name = join('/tmp', String(Math.random()));
     fs.writeFileSync(name, 'hello world');
     const rm = remy(name);
     
@@ -186,6 +173,51 @@ test('remy: _progress', async (t) => {
     const [n] = result;
     
     t.equal(n, 300, 'should emit progress once');
+    t.end();
+});
+
+test('remy: file inside zip package', async (t) => {
+    const outerPath = join(__dirname, 'fixture', 'hello.zip');
+    const innerPath = '/hello/world.txt';
+    const fixtureFile = await readFile(outerPath);
+    
+    await read(`${outerPath}${innerPath}`);
+    const rm = remy(`${outerPath}${innerPath}`);
+    
+    await once(rm, 'end');
+    const [error] = await tryToCatch(read, `${outerPath}${innerPath}`);
+    
+    await writeFile(outerPath, fixtureFile);
+    
+    t.ok(error);
+    t.end();
+});
+
+test('remy: file inside zip package: file', async (t) => {
+    const outerPath = join(__dirname, 'fixture', 'hello.zip');
+    const innerPath = '/hello/world.txt';
+    const fixtureFile = await readFile(outerPath);
+    
+    const rm = remy(`${outerPath}${innerPath}`);
+    const name = await once(rm, 'file');
+    
+    await writeFile(outerPath, fixtureFile);
+    
+    t.ok(name);
+    t.end();
+});
+
+test('remy: abort', async (t) => {
+    const outerPath = join(__dirname, 'fixture', 'hello.zip');
+    const innerPath = '/hello/world.txt';
+    //const fixtureFile = await readFile(outerPath);
+    const rm = remy(`${outerPath}${innerPath}`);
+    rm.abort();
+    await once(rm, 'end');
+    
+    //await writeFile(outerPath, fixtureFile);
+    
+    t.pass('should abort remove');
     t.end();
 });
 
