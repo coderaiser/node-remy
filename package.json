@@ -29,7 +29,7 @@
   "dependencies": {
     "findit2": "^2.2.3",
     "glob": "^7.1.0",
-    "redzip": "^1.7.1",
+    "redzip": "^2.0.0",
     "try-to-catch": "^3.0.0"
   },
   "devDependencies": {
