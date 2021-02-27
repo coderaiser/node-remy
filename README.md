@@ -98,12 +98,12 @@ Removing ended up
 MIT
 
 [NPMIMGURL]: https://img.shields.io/npm/v/remy.svg?style=flat
-[BuildStatusIMGURL]: https://img.shields.io/travis/coderaiser/node-remy/master.svg?style=flat
+[BuildStatusURL]: https://github.com/coderaiser/node-remy/actions?query=workflow%3A%22Node+CI%22 "Build Status"
+[BuildStatusIMGURL]: https://github.com/coderaiser/node-remy/workflows/Node%20CI/badge.svg
 [DependencyStatusIMGURL]: https://img.shields.io/david/coderaiser/node-remy.svg?style=flat
 [LicenseIMGURL]: https://img.shields.io/badge/license-MIT-317BF9.svg?style=flat
 [CoverageIMGURL]: https://coveralls.io/repos/coderaiser/node-remy/badge.svg?branch=master&service=github
 [NPMURL]: https://npmjs.org/package/remy "npm"
-[BuildStatusURL]: https://travis-ci.org/coderaiser/node-remy "Build Status"
 [DependencyStatusURL]: https://david-dm.org/coderaiser/node-remy "Dependency Status"
 [LicenseURL]: https://tldrlegal.com/license/mit-license "MIT License"
 [CoverageURL]: https://coveralls.io/github/coderaiser/node-remy?branch=master
