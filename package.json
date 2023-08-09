@@ -39,7 +39,7 @@
     "eslint": "^7.13.0",
     "eslint-plugin-node": "^11.0.0",
     "eslint-plugin-putout": "^19.0.3",
-    "madrun": "^8.6.4",
+    "madrun": "^9.3.1",
     "mock-require": "^3.0.2",
     "nodemon": "^2.0.2",
     "putout": "^31.0.4",
