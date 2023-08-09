@@ -43,7 +43,7 @@
     "mock-require": "^3.0.2",
     "nodemon": "^2.0.2",
     "putout": "^31.0.4",
-    "supertape": "^5.0.0",
+    "supertape": "^8.4.1",
     "try-catch": "^3.0.0"
   },
   "engines": {
