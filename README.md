@@ -1,4 +1,4 @@
-# Remy [![License][LicenseIMGURL]][LicenseURL] [![NPM version][NPMIMGURL]][NPMURL] [![Dependency Status][DependencyStatusIMGURL]][DependencyStatusURL] [![Build Status][BuildStatusIMGURL]][BuildStatusURL] [![Coverage Status][CoverageIMGURL]][CoverageURL]
+# Remy [![License][LicenseIMGURL]][LicenseURL] [![NPM version][NPMIMGURL]][NPMURL] [![Build Status][BuildStatusIMGURL]][BuildStatusURL] [![Coverage Status][CoverageIMGURL]][CoverageURL]
 
 Remove files with emitter (also in `zip` packages).
 
@@ -42,11 +42,7 @@ const remy = require('remy');
 const cwd = process.cwd();
 const abortOnError = false;
 
-const rm = remy(cwd, [
-    'LICENSE',
-    'README.md',
-    'package.json',
-]);
+const rm = remy(cwd, ['LICENSE', 'README.md', 'package.json']);
 
 rm.on('file', (name) => {
     console.log(name);
@@ -66,9 +62,6 @@ rm.on('progress', (percent) => {
 });
 
 rm.on('error', (error) => {
-    if (abortOnError)
-        return rm.abort();
-    
     rm.continue();
 });
 
@@ -100,10 +93,8 @@ MIT
 [NPMIMGURL]: https://img.shields.io/npm/v/remy.svg?style=flat
 [BuildStatusURL]: https://github.com/coderaiser/node-remy/actions?query=workflow%3A%22Node+CI%22 "Build Status"
 [BuildStatusIMGURL]: https://github.com/coderaiser/node-remy/workflows/Node%20CI/badge.svg
-[DependencyStatusIMGURL]: https://img.shields.io/david/coderaiser/node-remy.svg?style=flat
 [LicenseIMGURL]: https://img.shields.io/badge/license-MIT-317BF9.svg?style=flat
 [CoverageIMGURL]: https://coveralls.io/repos/coderaiser/node-remy/badge.svg?branch=master&service=github
 [NPMURL]: https://npmjs.org/package/remy "npm"
-[DependencyStatusURL]: https://david-dm.org/coderaiser/node-remy "Dependency Status"
 [LicenseURL]: https://tldrlegal.com/license/mit-license "MIT License"
 [CoverageURL]: https://coveralls.io/github/coderaiser/node-remy?branch=master

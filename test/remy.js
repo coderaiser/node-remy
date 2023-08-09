@@ -4,6 +4,7 @@ const {once} = require('events');
 const os = require('os');
 const {join} = require('path');
 const fs = require('fs');
+
 const {
     mkdir,
     readFile,
@@ -74,12 +75,14 @@ test('file: no errors', async (t) => {
     const rm = remy(name);
     
     await once(rm, 'end');
+    
     t.pass('no errors');
     t.end();
 });
 
 test('directory: no errors', async (t) => {
     const name = join(__dirname, 'fixture', 'directory-no-errors');
+    
     await mkdir(name, {
         recursive: true,
     });
@@ -90,7 +93,7 @@ test('directory: no errors', async (t) => {
     t.end();
 });
 
-test('pause/continue', async (t) => {
+test('remy: pause/continue', async (t) => {
     const name = join('/tmp', String(Math.random()));
     fs.writeFileSync(name, 'hello world');
     const rm = remy(name);
@@ -113,6 +116,7 @@ test('pause/continue: couple files', async (t) => {
     const name2 = String(Math.random());
     const full1 = join('/tmp', name1);
     const full2 = join('/tmp', name2);
+    
     fs.writeFileSync(full1, 'hello world1');
     fs.writeFileSync(full2, 'hello world2');
     const rm = remy('/tmp', [name1, name2]);
@@ -139,6 +143,7 @@ test('file: find error', async (t) => {
     
     fs.lstat = (name, fn) => {
         const error = Error('Some error');
+        
         error.code = code;
         
         process.nextTick(() => {
@@ -148,7 +153,9 @@ test('file: find error', async (t) => {
     
     const rm = remy(name);
     const [error] = await once(rm, 'error');
+    
     fs.lstat = lstat;
+    
     t.equal(error.code, 'ENOENT', error);
     t.end();
 });
@@ -210,14 +217,14 @@ test('remy: file inside zip package: file', async (t) => {
 test('remy: abort', async (t) => {
     const outerPath = join(__dirname, 'fixture', 'hello.zip');
     const innerPath = '/hello/world.txt';
+    
     //const fixtureFile = await readFile(outerPath);
     const rm = remy(`${outerPath}${innerPath}`);
+    
     rm.abort();
     await once(rm, 'end');
-    
     //await writeFile(outerPath, fixtureFile);
     
     t.pass('should abort remove');
     t.end();
 });
-
